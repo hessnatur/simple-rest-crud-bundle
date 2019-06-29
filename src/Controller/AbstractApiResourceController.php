@@ -11,12 +11,13 @@ namespace Hessnatur\SimpleRestCRUDBundle\Controller;
 
 use Doctrine\ORM\QueryBuilder;
 use FOS\RestBundle\View\View;
-use Hessnatur\CSRSupplierSurvey\Manager\ApiResourceManager;
-use Hessnatur\CSRSupplierSurvey\Model\ApiResource;
+use FOS\RestBundle\View\ViewHandlerInterface;
+use Hessnatur\SimpleRestCRUDBundle\Manager\ApiResourceManager;
+use Hessnatur\SimpleRestCRUDBundle\Model\ApiResource;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Hessnatur\CSRSupplierSurvey\Repository\ApiResourceRepositoryInterface;
-use Hessnatur\CSRSupplierSurvey\Service\Authentication;
+use Hessnatur\SimpleRestCRUDBundle\Repository\ApiResourceRepositoryInterface;
 use Lexik\Bundle\FormFilterBundle\Filter\FilterBuilderUpdaterInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -34,9 +35,9 @@ abstract class AbstractApiResourceController
     protected $apiResourceManager;
 
     /**
-     * @var Authentication
+     * @var EventDispatcherInterface
      */
-    protected $authentication;
+    protected $eventDispatcher;
 
     /**
      * @var FormFactoryInterface
@@ -54,32 +55,32 @@ abstract class AbstractApiResourceController
     protected $requestStack;
 
     /**
-     * @var string
+     * @var ViewHandlerInterface
      */
-    protected $environment;
+    protected $viewHandler;
 
     /**
      * @param ApiResourceManager            $apiResourceManager
-     * @param Authentication                $authentication
+     * @param EventDispatcherInterface      $eventDispatcher
      * @param FormFactoryInterface          $formFactory
      * @param FilterBuilderUpdaterInterface $filterBuilderUpdater
      * @param RequestStack                  $requestStack
-     * @param string                        $environment
+     * @param ViewHandlerInterface          $viewHandler
      */
     public function __construct(
         ApiResourceManager $apiResourceManager,
-        Authentication $authentication,
+        EventDispatcherInterface $eventDispatcher,
         FormFactoryInterface $formFactory,
         FilterBuilderUpdaterInterface $filterBuilderUpdater,
         RequestStack $requestStack,
-        string $environment
+        ViewHandlerInterface $viewHandler
     ) {
         $this->apiResourceManager = $apiResourceManager;
-        $this->authentication = $authentication;
+        $this->eventDispatcher = $eventDispatcher;
         $this->formFactory = $formFactory;
         $this->filterBuilderUpdater = $filterBuilderUpdater;
         $this->requestStack = $requestStack;
-        $this->environment = $environment;
+        $this->viewHandler = $viewHandler;
     }
 
     /**
@@ -90,14 +91,22 @@ abstract class AbstractApiResourceController
     public abstract function getApiResourceClass(): string;
 
     /**
-     * The function 
+     * The function returns the class name of the filter class.
      *
      * @return string
      */
     public abstract function getApiResourceFilterFormClass(): string;
 
+    /**
+     * The function returns the class name of the the filter class to update the entity handled in this controller.
+     *
+     * @return string
+     */
     public abstract function getApiResourceFormClass(): string;
 
+    /**
+     * @return int
+     */
     public function getApiResourceListLimit(): int
     {
         return 20;
@@ -107,25 +116,26 @@ abstract class AbstractApiResourceController
      * @return View
      *
      * @Rest\Get("")
+     * @Rest\View(serializerGroups={"list"})
      */
     public function getApiResourcesAction()
     {
-        $queryBuilder = $this->getRepository()->createQueryBuilder(strtolower('e'));
+        $queryBuilder = $this->createQueryBuilder();
         $form = $this->formFactory->create($this->getApiResourceFilterFormClass());
         $form->submit($this->requestStack->getCurrentRequest()->query->all());
 
         $orderByField = $this->requestStack->getMasterRequest()->query->get(
             'orderBy',
-            $this->getRepository()->getStandardSortField()
+            $this->getRepository()::getStandardSortField()
         );
         $orderByDirection = $this->requestStack->getMasterRequest()->query->get(
             'order',
-            $this->getRepository()->getStandardSortDirection()
+            $this->getRepository()::getStandardSortDirection()
         );
 
         if (
-            in_array($orderByField, $this->getRepository()->getSortableFields())
-            && in_array($orderByDirection, ['ASC', 'DESC'])
+            in_array($orderByField, $this->getRepository()::getSortableFields())
+            && in_array(strtolower($orderByDirection), ['asc', 'desc'])
         ) {
             $queryBuilder->orderBy($queryBuilder->getRootAliases()[0] . '.' . $orderByField, $orderByDirection);
         }
@@ -207,7 +217,7 @@ abstract class AbstractApiResourceController
             $responseCode = Response::HTTP_CREATED;
             $apiResource = $this->createApiResource();
 
-            if (!$apiResource->checkUserCanCreate($this->authentication->getCurrentUser())) {
+            if (!$apiResource->getUserCanCreate()) {
                 throw new AccessDeniedHttpException();
             }
         }
@@ -245,15 +255,6 @@ abstract class AbstractApiResourceController
     }
 
     /**
-     * @return ApiResource
-     */
-    public function createApiResource()
-    {
-        $apiResourceClass = $this->getApiResourceClass();
-        return new $apiResourceClass();
-    }
-
-    /**
      * @param QueryBuilder $queryBuilder
      *
      * @return array
@@ -276,15 +277,32 @@ abstract class AbstractApiResourceController
             'maxResults' => count($results),
             'results' => array_slice($results, ($page - 1) * $limit, $limit),
             'pages' => ceil(count($results) / $limit),
-            'currentPage' => $page,
-            //'query' => $queryBuilder->getQuery()->getSQL(),
+            'currentPage' => $page
         ];
 
-        if ($this->environment === 'dev') {
-            $paginationData['query'] = $queryBuilder->getQuery()->getSQL();
-        }
-
         return $paginationData;
+    }
+
+    /**
+     * @return ApiResource
+     */
+    public function createApiResource()
+    {
+        $apiResourceClass = $this->getApiResourceClass();
+        return new $apiResourceClass();
+    }
+
+    /**
+     * @param string|null $alias
+     *
+     * @return QueryBuilder
+     */
+    protected function createQueryBuilder(?string $alias = null)
+    {
+        if($alias === null) {
+            $alias = 'e';
+        }
+        return $this->getRepository()->createQueryBuilder($alias);
     }
 
     /**

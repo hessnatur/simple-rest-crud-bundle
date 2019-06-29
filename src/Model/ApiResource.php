@@ -40,6 +40,44 @@ abstract class ApiResource
      */
     protected $self;
 
+    /**
+     * @var \DateTime
+     *
+     * @JMS\Expose()
+     * @JMS\Groups({"detail", "list"})
+     *
+     * @ORM\Column(type="datetime", options={"default": "CURRENT_TIMESTAMP"})
+     */
+    protected $createdAt;
+
+    /**
+     * @var boolean
+     */
+    protected $userCanCreate = true;
+
+    /**
+     * @var boolean
+     */
+    protected $userCanUpdate = true;
+
+    /**
+     * @var boolean
+     */
+    protected $userCanDelete = true;
+
+    /**
+     * @JMS\VirtualProperty("authorization")
+     * @JMS\Expose()
+     * @JMS\Groups({"detail", "list"})
+     */
+    public function getAuthorization()
+    {
+        return [
+            'update' => $this->userCanUpdate,
+            'delete' => $this->userCanDelete
+        ];
+    }
+
     public function __clone()
     {
         $this->id = null;
@@ -76,9 +114,83 @@ abstract class ApiResource
     }
 
     /**
+     * @return \DateTime
+     */
+    public function getCreatedAt(): \DateTime
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $createdAt
+     */
+    public function setCreatedAt(\DateTime $createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getUserCanCreate(): bool
+    {
+        return $this->userCanCreate;
+    }
+
+    /**
+     * @param bool $userCanCreate
+     *
+     * @return $this
+     */
+    public function setUserCanCreate(bool $userCanCreate): self
+    {
+        $this->userCanCreate = $userCanCreate;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getUserCanUpdate(): bool
+    {
+        return $this->userCanUpdate;
+    }
+
+    /**
+     * @param bool $userCanUpdate
+     *
+     * @return $this
+     */
+    public function setUserCanUpdate(bool $userCanUpdate): self
+    {
+        $this->userCanUpdate = $userCanUpdate;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getUserCanDelete(): bool
+    {
+        return $this->userCanDelete;
+    }
+
+    /**
+     * @param bool $userCanDelete
+     *
+     * @return $this
+     */
+    public function setUserCanDelete(bool $userCanDelete): self
+    {
+        $this->userCanDelete = $userCanDelete;
+
+        return $this;
+    }
+
+    /**
      * The function get the resource-specific path.
      *
      * @return string
      */
-    abstract public function getApiPath();
+    abstract public static function getBaseApiPath();
 }
