@@ -12,6 +12,8 @@ namespace Hessnatur\SimpleRestCRUDBundle\Controller;
 use Doctrine\ORM\QueryBuilder;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\View\ViewHandlerInterface;
+use Hessnatur\SimpleRestCRUDBundle\Event\ApiResourceEvent;
+use Hessnatur\SimpleRestCRUDBundle\HessnaturSimpleRestCRUDEvents;
 use Hessnatur\SimpleRestCRUDBundle\Manager\ApiResourceManager;
 use Hessnatur\SimpleRestCRUDBundle\Model\ApiResource;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -155,12 +157,7 @@ abstract class AbstractApiResourceController
      */
     public function getApiResourceAction(string $id)
     {
-        $apiResource = $this->fetchApiResource($id);
-        if (!$apiResource->getUserCanSee()) {
-            throw new AccessDeniedHttpException();
-        }
-
-        return View::create($apiResource);
+        return View::create($this->fetchApiResource($id));
     }
 
     /**
@@ -178,7 +175,12 @@ abstract class AbstractApiResourceController
             throw new AccessDeniedHttpException();
         }
 
+        $this->eventDispatcher->dispatch(
+            new ApiResourceEvent($apiResource),
+            HessnaturSimpleRestCRUDEvents::BEFORE_DELETE_API_RESOURCE
+        );
         $this->apiResourceManager->remove($apiResource);
+
         return View::create(null, Response::HTTP_OK);
     }
 
@@ -226,7 +228,19 @@ abstract class AbstractApiResourceController
         $form->submit($this->requestStack->getMasterRequest()->request->all());
 
         if ($form->isValid()) {
+            $this->eventDispatcher->dispatch(
+                new ApiResourceEvent($apiResource),
+                $responseCode === Response::HTTP_CREATED
+                    ? HessnaturSimpleRestCRUDEvents::BEFORE_CREATE_API_RESOURCE
+                    : HessnaturSimpleRestCRUDEvents::BEFORE_UPDATE_API_RESOURCE
+            );
             $this->apiResourceManager->update($apiResource);
+            $this->eventDispatcher->dispatch(
+                new ApiResourceEvent($apiResource),
+                $responseCode === Response::HTTP_CREATED
+                    ? HessnaturSimpleRestCRUDEvents::AFTER_CREATE_API_RESOURCE
+                    : HessnaturSimpleRestCRUDEvents::AFTER_UPDATE_API_RESOURCE
+            );
 
             return View::create($apiResource, $responseCode);
         }
@@ -299,7 +313,7 @@ abstract class AbstractApiResourceController
      */
     protected function createQueryBuilder(?string $alias = null)
     {
-        if($alias === null) {
+        if ($alias === null) {
             $alias = 'e';
         }
         return $this->getRepository()->createQueryBuilder($alias);

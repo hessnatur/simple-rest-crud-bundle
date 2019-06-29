@@ -83,6 +83,11 @@ abstract class ApiResource
         $this->id = null;
     }
 
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+    }
+
     /**
      * @return string
      */
