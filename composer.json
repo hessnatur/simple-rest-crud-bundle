@@ -3,6 +3,9 @@
     "description": "The package contains abstract classes and services to build a rest-api-interface with symfony 4, fos-rest-bundle, jms-serializer, lexik-form-filter-bundle in few steps.",
     "type": "symfony-bundle",
     "license": "MIT",
+    "autoload": {
+        "psr-4": {"Hessnatur\\SimpleRestCRUDBundle\\": "src/"}
+    },
     "authors": [
         {
             "name": "Felix Niedballa",
