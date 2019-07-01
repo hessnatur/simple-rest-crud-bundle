@@ -32,8 +32,9 @@ class HessnaturSimpleRestCRUDExtension extends Extension
     private function registerServices($config, ContainerBuilder $containerBuilder)
     {
         $services = [
-            'apiResourceManager' => ApiResourceManagerInterface::class
+            'api_resource_manager' => ApiResourceManagerInterface::class
         ];
+
         foreach ($services as $serviceID => $serviceClass) {
             $alias = 'hessnatur_simple_rest_crud.' . $serviceID;
             $containerBuilder->setAlias($alias, $config['settings'][$serviceID]);

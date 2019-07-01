@@ -71,7 +71,7 @@ abstract class AbstractApiResourceController
      * @param ViewHandlerInterface          $viewHandler
      */
     public function __construct(
-        ApiResourceManager $apiResourceManager,
+        ApiResourceManagerInterface $apiResourceManager,
         EventDispatcherInterface $eventDispatcher,
         FormFactoryInterface $formFactory,
         FilterBuilderUpdaterInterface $filterBuilderUpdater,
