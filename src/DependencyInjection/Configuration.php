@@ -26,11 +26,11 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('settings')
                     ->addDefaultsIfNotSet()
                         ->children()
-                            ->scalarNode('api_resource_manager')->defaultValue(ApiResourceManager::class)
+                            ->scalarNode('api_prefix')->defaultValue('')->end()
+                            ->scalarNode('api_resource_manager')->defaultValue(ApiResourceManager::class)->end()
                         ->end()
                     ->end()
                 ->end()
-            ->end()
         ;
 
         return $treeBuilder;

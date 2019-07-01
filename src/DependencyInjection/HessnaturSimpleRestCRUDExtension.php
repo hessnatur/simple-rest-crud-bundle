@@ -26,6 +26,8 @@ class HessnaturSimpleRestCRUDExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
+        $container->setParameter('hessnatur_simple_rest_crud.api_prefix', $config['settings']['api_prefix']);
+
         $this->registerServices($config, $container);
     }
 
