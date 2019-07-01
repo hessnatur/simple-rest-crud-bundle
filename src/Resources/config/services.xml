@@ -1,0 +1,16 @@
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="Hessnatur\SimpleRestCRUDBundle\Manager\ApiResourceManager"
+                 alias="hessnatur_simple_rest_crud.api_resource_manager"/>
+        <service id="hessnatur_simple_rest_crud.api_resource_manager"
+                 class="Hessnatur\SimpleRestCRUDBundle\Manager\ApiResourceManager">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+        </service>
+        <service id="jms_serializer.form_error_handler"
+                 class="Hessnatur\SimpleRestCRUDBundle\Serializer\FormErrorHandler">
+            <tag name="jms_serializer.subscribing_handler"/>
+        </service>
+    </services>
+</container>
