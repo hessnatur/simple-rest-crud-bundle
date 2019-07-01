@@ -15,6 +15,7 @@ use FOS\RestBundle\View\ViewHandlerInterface;
 use Hessnatur\SimpleRestCRUDBundle\Event\ApiResourceEvent;
 use Hessnatur\SimpleRestCRUDBundle\HessnaturSimpleRestCRUDEvents;
 use Hessnatur\SimpleRestCRUDBundle\Manager\ApiResourceManager;
+use Hessnatur\SimpleRestCRUDBundle\Manager\ApiResourceManagerInterface;
 use Hessnatur\SimpleRestCRUDBundle\Model\ApiResource;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Hessnatur\SimpleRestCRUDBundle\Repository\ApiResourceRepositoryInterface;
@@ -32,7 +33,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 abstract class AbstractApiResourceController
 {
     /**
-     * @var ApiResourceManager
+     * @var ApiResourceManagerInterface
      */
     protected $apiResourceManager;
 
@@ -62,7 +63,7 @@ abstract class AbstractApiResourceController
     protected $viewHandler;
 
     /**
-     * @param ApiResourceManager            $apiResourceManager
+     * @param ApiResourceManagerInterface   $apiResourceManager
      * @param EventDispatcherInterface      $eventDispatcher
      * @param FormFactoryInterface          $formFactory
      * @param FilterBuilderUpdaterInterface $filterBuilderUpdater
