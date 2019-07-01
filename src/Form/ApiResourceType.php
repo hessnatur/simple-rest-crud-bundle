@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * (c) hessnatur Textilien GmbH <https://hessnatur.io/>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Hessnatur\SimpleRestCRUDBundle\Form;
 
 use Hessnatur\SimpleRestCRUDBundle\Model\ApiResource;
@@ -17,7 +24,7 @@ class ApiResourceType extends AbstractType
             [
                 'csrf_protection' => false,
                 'allow_extra_fields' => true,
-                'data_class' => ApiResource::class
+                'data_class' => ApiResource::class,
             ]
         );
     }

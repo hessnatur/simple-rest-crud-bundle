@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * (c) hessnatur Textilien GmbH <https://hessnatur.io/>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Hessnatur\SimpleRestCRUDBundle\Filter;
 
 use Hessnatur\SimpleRestCRUDBundle\Model\ApiResource;
@@ -38,12 +45,10 @@ abstract class ApiResourceFilter extends AbstractType
                     }
 
                     return $query->createCondition($expr);
-                }
+                },
             ]
         );
     }
-
-    protected abstract function getSearchableFields(): array;
 
     public function configureOptions(OptionsResolver $resolver): void
     {
@@ -51,8 +56,10 @@ abstract class ApiResourceFilter extends AbstractType
             [
                 'csrf_protection' => false,
                 'allow_extra_fields' => true,
-                'data_class' => ApiResource::class
+                'data_class' => ApiResource::class,
             ]
         );
     }
+
+    abstract protected function getSearchableFields(): array;
 }

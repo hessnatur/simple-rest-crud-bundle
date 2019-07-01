@@ -51,19 +51,29 @@ abstract class ApiResource
     protected $createdAt;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $userCanCreate = true;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $userCanUpdate = true;
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $userCanDelete = true;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+    }
+
+    public function __clone()
+    {
+        $this->id = null;
+    }
 
     /**
      * @JMS\VirtualProperty("authorization")
@@ -74,18 +84,8 @@ abstract class ApiResource
     {
         return [
             'update' => $this->userCanUpdate,
-            'delete' => $this->userCanDelete
+            'delete' => $this->userCanDelete,
         ];
-    }
-
-    public function __clone()
-    {
-        $this->id = null;
-    }
-
-    public function __construct()
-    {
-        $this->createdAt = new \DateTime();
     }
 
     /**
@@ -150,6 +150,7 @@ abstract class ApiResource
     public function setUserCanCreate(bool $userCanCreate): self
     {
         $this->userCanCreate = $userCanCreate;
+
         return $this;
     }
 
@@ -169,6 +170,7 @@ abstract class ApiResource
     public function setUserCanUpdate(bool $userCanUpdate): self
     {
         $this->userCanUpdate = $userCanUpdate;
+
         return $this;
     }
 

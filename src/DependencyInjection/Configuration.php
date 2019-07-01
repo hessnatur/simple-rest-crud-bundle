@@ -1,9 +1,15 @@
 <?php
 
+/*
+ * (c) hessnatur Textilien GmbH <https://hessnatur.io/>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Hessnatur\SimpleRestCRUDBundle\DependencyInjection;
 
 use Hessnatur\SimpleRestCRUDBundle\Manager\ApiResourceManager;
-use Hessnatur\SimpleRestCRUDBundle\Manager\ApiResourceManagerInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 

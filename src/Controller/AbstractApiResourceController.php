@@ -10,6 +10,7 @@
 namespace Hessnatur\SimpleRestCRUDBundle\Controller;
 
 use Doctrine\ORM\QueryBuilder;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
 use FOS\RestBundle\View\ViewHandlerInterface;
 use Hessnatur\SimpleRestCRUDBundle\Event\ApiResourceEvent;
@@ -17,7 +18,6 @@ use Hessnatur\SimpleRestCRUDBundle\HessnaturSimpleRestCRUDEvents;
 use Hessnatur\SimpleRestCRUDBundle\Manager\ApiResourceManager;
 use Hessnatur\SimpleRestCRUDBundle\Manager\ApiResourceManagerInterface;
 use Hessnatur\SimpleRestCRUDBundle\Model\ApiResource;
-use FOS\RestBundle\Controller\Annotations as Rest;
 use Hessnatur\SimpleRestCRUDBundle\Repository\ApiResourceRepositoryInterface;
 use Lexik\Bundle\FormFilterBundle\Filter\FilterBuilderUpdaterInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -91,21 +91,21 @@ abstract class AbstractApiResourceController
      *
      * @return string
      */
-    public abstract function getApiResourceClass(): string;
+    abstract public function getApiResourceClass(): string;
 
     /**
      * The function returns the class name of the filter class.
      *
      * @return string
      */
-    public abstract function getApiResourceFilterFormClass(): string;
+    abstract public function getApiResourceFilterFormClass(): string;
 
     /**
      * The function returns the class name of the the filter class to update the entity handled in this controller.
      *
      * @return string
      */
-    public abstract function getApiResourceFormClass(): string;
+    abstract public function getApiResourceFormClass(): string;
 
     /**
      * @return int
@@ -189,6 +189,7 @@ abstract class AbstractApiResourceController
      * @param string $id
      *
      * @return View
+     *
      * @throws \Exception
      *
      * @Rest\Put("/{id}")
@@ -208,6 +209,7 @@ abstract class AbstractApiResourceController
      * @param ApiResource|null $apiResource
      *
      * @return View
+     *
      * @throws \Exception
      *
      * @Rest\Post("")
@@ -247,6 +249,16 @@ abstract class AbstractApiResourceController
         }
 
         return View::create(['form' => $form], Response::HTTP_BAD_REQUEST);
+    }
+
+    /**
+     * @return ApiResource
+     */
+    protected function createApiResource()
+    {
+        $apiResourceClass = $this->getApiResourceClass();
+
+        return new $apiResourceClass();
     }
 
     /**
@@ -292,19 +304,10 @@ abstract class AbstractApiResourceController
             'maxResults' => count($results),
             'results' => array_slice($results, ($page - 1) * $limit, $limit),
             'pages' => ceil(count($results) / $limit),
-            'currentPage' => $page
+            'currentPage' => $page,
         ];
 
         return $paginationData;
-    }
-
-    /**
-     * @return ApiResource
-     */
-    public function createApiResource()
-    {
-        $apiResourceClass = $this->getApiResourceClass();
-        return new $apiResourceClass();
     }
 
     /**
@@ -317,6 +320,7 @@ abstract class AbstractApiResourceController
         if ($alias === null) {
             $alias = 'e';
         }
+
         return $this->getRepository()->createQueryBuilder($alias);
     }
 

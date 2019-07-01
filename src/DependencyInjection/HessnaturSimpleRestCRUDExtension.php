@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * (c) hessnatur Textilien GmbH <https://hessnatur.io/>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Hessnatur\SimpleRestCRUDBundle\DependencyInjection;
 
 use Hessnatur\SimpleRestCRUDBundle\Manager\ApiResourceManagerInterface;
@@ -23,7 +30,7 @@ class HessnaturSimpleRestCRUDExtension extends Extension
         $configuration = new Configuration();
         $config = $processor->processConfiguration($configuration, $configs);
 
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
 
         $container->setParameter('hessnatur_simple_rest_crud.api_prefix', $config['settings']['api_prefix']);
@@ -34,7 +41,7 @@ class HessnaturSimpleRestCRUDExtension extends Extension
     private function registerServices($config, ContainerBuilder $containerBuilder)
     {
         $services = [
-            'api_resource_manager' => ApiResourceManagerInterface::class
+            'api_resource_manager' => ApiResourceManagerInterface::class,
         ];
 
         foreach ($services as $serviceID => $serviceClass) {

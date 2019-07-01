@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * (c) hessnatur Textilien GmbH <https://hessnatur.io/>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Hessnatur\SimpleRestCRUDBundle\Manager;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,7 +32,7 @@ class ApiResourceManager implements ApiResourceManagerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function update(ApiResource $apiResource): void
     {
@@ -34,7 +41,7 @@ class ApiResourceManager implements ApiResourceManagerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function remove(ApiResource $apiResource): void
     {

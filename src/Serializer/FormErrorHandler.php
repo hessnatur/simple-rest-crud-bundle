@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * (c) hessnatur Textilien GmbH <https://hessnatur.io/>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Hessnatur\SimpleRestCRUDBundle\Serializer;
 
 use JMS\Serializer\Handler\FormErrorHandler as JMSFormErrorsHandler;
@@ -90,7 +97,7 @@ class FormErrorHandler extends JMSFormErrorsHandler
      */
     private function getMessageError(FormError $error)
     {
-        if($this->translation === null) {
+        if ($this->translation === null) {
             return $error->getMessage();
         }
 
