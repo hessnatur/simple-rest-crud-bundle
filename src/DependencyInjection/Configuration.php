@@ -10,6 +10,7 @@
 namespace Hessnatur\SimpleRestCRUDBundle\DependencyInjection;
 
 use Hessnatur\SimpleRestCRUDBundle\Manager\ApiResourceManager;
+use Hessnatur\SimpleRestCRUDBundle\Manager\ApiResourceManagerInterface;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -33,7 +34,7 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                         ->children()
                             ->scalarNode('api_prefix')->defaultValue('')->end()
-                            ->scalarNode('api_resource_manager')->defaultValue(ApiResourceManager::class)->end()
+                            ->scalarNode('api_resource_manager')->defaultValue(ApiResourceManagerInterface::class)->end()
                         ->end()
                     ->end()
                 ->end()

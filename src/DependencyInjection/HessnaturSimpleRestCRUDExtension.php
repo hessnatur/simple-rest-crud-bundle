@@ -9,6 +9,7 @@
 
 namespace Hessnatur\SimpleRestCRUDBundle\DependencyInjection;
 
+use Hessnatur\SimpleRestCRUDBundle\Manager\ApiResourceManager;
 use Hessnatur\SimpleRestCRUDBundle\Manager\ApiResourceManagerInterface;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
@@ -40,14 +41,10 @@ class HessnaturSimpleRestCRUDExtension extends Extension
 
     private function registerServices($config, ContainerBuilder $containerBuilder)
     {
-        $services = [
-            'api_resource_manager' => ApiResourceManagerInterface::class,
-        ];
-
-        foreach ($services as $serviceID => $serviceClass) {
-            $alias = 'hessnatur_simple_rest_crud.' . $serviceID;
-            $containerBuilder->setAlias($alias, $config['settings'][$serviceID]);
-            $containerBuilder->setAlias($serviceClass, $alias);
+        if($config['settings']['api_resource_manager'] !== ApiResourceManagerInterface::class) {
+            $alias = 'hessnatur_simple_rest_crud.api_resource_manager';
+            $containerBuilder->setAlias($alias, $config['settings']['api_resource_manager']);
+            $containerBuilder->setAlias(ApiResourceManagerInterface::class, $alias);
         }
     }
 }
