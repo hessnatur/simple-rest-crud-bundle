@@ -9,7 +9,6 @@
 
 namespace Hessnatur\SimpleRestCRUDBundle\Form;
 
-use Hessnatur\SimpleRestCRUDBundle\Model\ApiResource;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -18,13 +17,17 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ApiResourceType extends AbstractType
 {
+    /**
+     * Configure standard options to prevent csrf protection and allow extra fields.
+     *
+     * @param OptionsResolver $resolver
+     */
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             [
                 'csrf_protection' => false,
                 'allow_extra_fields' => true,
-                'data_class' => ApiResource::class,
             ]
         );
     }
