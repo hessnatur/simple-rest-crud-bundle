@@ -12,7 +12,7 @@ namespace Hessnatur\SimpleRestCRUDBundle\EventListener;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
-use Hessnatur\CSRSupplierSurvey\Model\ApiResource;
+use Hessnatur\SimpleRestCRUDBundle\Model\ApiResource;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class ApiResourceSelfPathListener implements EventSubscriber

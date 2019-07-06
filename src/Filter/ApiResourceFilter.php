@@ -56,7 +56,6 @@ abstract class ApiResourceFilter extends AbstractType
             [
                 'csrf_protection' => false,
                 'allow_extra_fields' => true,
-                'data_class' => ApiResource::class,
             ]
         );
     }

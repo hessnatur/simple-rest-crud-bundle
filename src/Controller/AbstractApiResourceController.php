@@ -198,7 +198,7 @@ abstract class AbstractApiResourceController
     public function putApiResourceAction(string $id)
     {
         $apiResource = $this->fetchApiResource($id);
-        if (!$apiResource->getUserCanEdit()) {
+        if (!$apiResource->getUserCanUpdate()) {
             throw new AccessDeniedHttpException();
         }
 
