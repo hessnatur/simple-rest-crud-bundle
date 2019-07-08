@@ -17,6 +17,11 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 class HessnaturSimpleRestCRUDEvents extends Bundle
 {
     /**
+     * The event fires after instantiating an api resource.
+     */
+    public const AFTER_INSTANTIATE_API_RESOURCE = 'hessnatur_simple_rest_crud.after_instantiate_api_resource';
+
+    /**
      * The event fires before creating an api resource.
      */
     public const BEFORE_CREATE_API_RESOURCE = 'hessnatur_simple_rest_crud.before_create_api_resource';

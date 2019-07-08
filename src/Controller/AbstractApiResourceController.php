@@ -222,6 +222,11 @@ abstract class AbstractApiResourceController
             $responseCode = Response::HTTP_CREATED;
             $apiResource = $this->createApiResource();
 
+            $this->eventDispatcher->dispatch(
+                new ApiResourceEvent($apiResource),
+                HessnaturSimpleRestCRUDEvents::AFTER_INSTANTIATE_API_RESOURCE
+            );
+
             if (!$apiResource->getUserCanCreate()) {
                 throw new AccessDeniedHttpException();
             }
