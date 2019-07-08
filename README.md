@@ -61,6 +61,27 @@ The following endpoints a created dynamically:
 | /users/{uuid}  | DELETE | DELETES the user with the given uuid. |
 | /users  | GET | Lists all users (you can filter with query params defined in ``getApiResourceFilterFormClass()``). |
 
+### Configure paths ###
+
+The bundle sets automatically self paths to the ApiResources. If you prefix this paths, you can configure this in the config file of the bundle:
+
+````
+hessnatur_simple_rest_crud:
+  settings:
+    api_prefix: 'api'
+````
+
+### Configure ApiResourceManager ###
+
+You can use an own ApiResourceManager. This class has to implement the ````Hessnatur\SimpleRestCRUDBundle\Manager\ApiResourceManagerInterface````.
+In the config file of the bundle you can configure your ApiResourceManager:
+
+````
+hessnatur_simple_rest_crud:
+  settings:
+    api_resource_manager: 'Hessnatur\YourCustomCodeNamespace\Manager\ApiResourceManager'
+````
+
 License
 -------
 
