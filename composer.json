@@ -1,0 +1,32 @@
+{
+    "name": "hessnatur/simple-rest-crud-bundle",
+    "description": "The package contains abstract classes and services to build a rest-api-interface with symfony 4, fos-rest-bundle, jms-serializer, lexik-form-filter-bundle in few steps.",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {"Hessnatur\\SimpleRestCRUDBundle\\": "src/"}
+    },
+    "authors": [
+        {
+            "name": "Felix Niedballa",
+            "email": "felix.niedballa@hess-natur.de"
+        }
+    ],
+    "require": {
+        "php": "^7.1",
+        "ramsey/uuid-doctrine": "^1.0",
+        "doctrine/doctrine-bundle": "^1.10",
+        "friendsofsymfony/rest-bundle": "^2.4",
+        "jms/serializer-bundle": "^2.0",
+        "lexik/form-filter-bundle": "^5.0",
+        "symfony/form": "^4.0",
+        "symfony/framework-bundle": "^4.0",
+        "symfony/event-dispatcher": "^4.0"
+    },
+    "conflict": {
+        "jms/serializer-bundle": "^3.0"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.15"
+    }
+}

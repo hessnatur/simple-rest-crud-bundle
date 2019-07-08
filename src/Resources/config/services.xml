@@ -1,0 +1,23 @@
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <service id="hessnatur_simple_rest_crud.api_resource_manager"
+                 class="Hessnatur\SimpleRestCRUDBundle\Manager\ApiResourceManager">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+        </service>
+        <service id="Hessnatur\SimpleRestCRUDBundle\Manager\ApiResourceManagerInterface" alias="hessnatur_simple_rest_crud.api_resource_manager" />
+
+        <service id="jms_serializer.form_error_handler"
+                 class="Hessnatur\SimpleRestCRUDBundle\Serializer\FormErrorHandler">
+            <tag name="jms_serializer.subscribing_handler"/>
+        </service>
+
+        <service id="Hessnatur\SimpleRestCRUDBundle\EventListener\ApiResourceSelfPathListener">
+            <argument type="service" id="request_stack"/>
+            <argument>%hessnatur_simple_rest_crud.api_prefix%</argument>
+            <tag name="doctrine.event_subscriber" event="postPersist"/>
+            <tag name="doctrine.event_subscriber" event="postLoad"/>
+        </service>
+    </services>
+</container>
