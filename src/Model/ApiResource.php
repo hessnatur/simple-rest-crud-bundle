@@ -23,6 +23,7 @@ abstract class ApiResource
      * @var string
      *
      * @JMS\Expose()
+     * @JMS\Type(string)
      * @JMS\Groups({"detail", "list"})
      *
      * @ORM\Id
