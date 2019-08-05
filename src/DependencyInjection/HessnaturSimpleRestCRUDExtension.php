@@ -35,6 +35,8 @@ class HessnaturSimpleRestCRUDExtension extends Extension
         $loader->load('services.xml');
 
         $container->setParameter('hessnatur_simple_rest_crud.api_prefix', $config['settings']['api_prefix']);
+        $container->setParameter('hessnatur_simple_rest_crud.extend_with_filter', $config['settings']['extend_with_filter']);
+        $container->setParameter('hessnatur_simple_rest_crud.extend_with_query', $config['settings']['extend_with_query']);
 
         $this->registerServices($config, $container);
     }

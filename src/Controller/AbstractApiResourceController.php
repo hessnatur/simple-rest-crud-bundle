@@ -20,6 +20,7 @@ use Hessnatur\SimpleRestCRUDBundle\Manager\ApiResourceManagerInterface;
 use Hessnatur\SimpleRestCRUDBundle\Model\ApiResource;
 use Hessnatur\SimpleRestCRUDBundle\Repository\ApiResourceRepositoryInterface;
 use Lexik\Bundle\FormFilterBundle\Filter\FilterBuilderUpdaterInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -63,12 +64,18 @@ abstract class AbstractApiResourceController
     protected $viewHandler;
 
     /**
+     * @var ParameterBagInterface
+     */
+    protected $parameterBag;
+
+    /**
      * @param ApiResourceManagerInterface   $apiResourceManager
      * @param EventDispatcherInterface      $eventDispatcher
      * @param FormFactoryInterface          $formFactory
      * @param FilterBuilderUpdaterInterface $filterBuilderUpdater
      * @param RequestStack                  $requestStack
      * @param ViewHandlerInterface          $viewHandler
+     * @param ParameterBagInterface         $parameterBag
      */
     public function __construct(
         ApiResourceManagerInterface $apiResourceManager,
@@ -76,7 +83,8 @@ abstract class AbstractApiResourceController
         FormFactoryInterface $formFactory,
         FilterBuilderUpdaterInterface $filterBuilderUpdater,
         RequestStack $requestStack,
-        ViewHandlerInterface $viewHandler
+        ViewHandlerInterface $viewHandler,
+        ParameterBagInterface $parameterBag
     ) {
         $this->apiResourceManager = $apiResourceManager;
         $this->eventDispatcher = $eventDispatcher;
@@ -84,6 +92,7 @@ abstract class AbstractApiResourceController
         $this->filterBuilderUpdater = $filterBuilderUpdater;
         $this->requestStack = $requestStack;
         $this->viewHandler = $viewHandler;
+        $this->parameterBag = $parameterBag;
     }
 
     /**
@@ -145,7 +154,17 @@ abstract class AbstractApiResourceController
 
         $this->filterBuilderUpdater->addFilterConditions($form, $queryBuilder);
 
-        return View::create($this->paginate($queryBuilder));
+        $paginationData = $this->paginate($queryBuilder);
+
+        if($this->parameterBag->get('hessnatur_simple_rest_crud.extend_with_query')) {
+            $paginationData['query'] = $queryBuilder->getQuery()->getSQL();
+        }
+
+        if($this->parameterBag->get('hessnatur_simple_rest_crud.extend_with_filter')) {
+            $paginationData['filter'] = $form->getData();
+        }
+
+        return View::create($paginationData);
     }
 
     /**
