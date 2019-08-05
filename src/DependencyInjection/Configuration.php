@@ -35,6 +35,8 @@ class Configuration implements ConfigurationInterface
                         ->children()
                             ->scalarNode('api_prefix')->defaultValue('')->end()
                             ->scalarNode('api_resource_manager')->defaultValue(ApiResourceManagerInterface::class)->end()
+                            ->booleanNode('extend_with_filter')->defaultValue(false)->end()
+                            ->booleanNode('extend_with_query')->defaultValue(false)->end()
                         ->end()
                     ->end()
                 ->end()
