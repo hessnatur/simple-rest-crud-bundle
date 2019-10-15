@@ -128,7 +128,7 @@ abstract class AbstractApiResourceController
      * @return View
      *
      * @Rest\Get("")
-     * @Rest\View(serializerGroups={"list"})
+     * @Rest\View(serializerGroups={"list"}, serializerEnableMaxDepthChecks=true)
      */
     public function getApiResourcesAction()
     {
@@ -173,7 +173,7 @@ abstract class AbstractApiResourceController
      * @return View
      *
      * @Rest\Get("/{id}")
-     * @Rest\View(serializerGroups={"detail"})
+     * @Rest\View(serializerGroups={"detail"}, serializerEnableMaxDepthChecks=true)
      */
     public function getApiResourceAction(string $id)
     {
@@ -186,7 +186,7 @@ abstract class AbstractApiResourceController
      * @return View
      *
      * @Rest\Delete("/{id}")
-     * @Rest\View(serializerGroups={"detail"})
+     * @Rest\View(serializerGroups={"detail"}, serializerEnableMaxDepthChecks=true)
      */
     public function deleteApiResourceAction(string $id)
     {
@@ -212,7 +212,7 @@ abstract class AbstractApiResourceController
      * @throws \Exception
      *
      * @Rest\Put("/{id}")
-     * @Rest\View(serializerGroups={"detail"})
+     * @Rest\View(serializerGroups={"detail"}, serializerEnableMaxDepthChecks=true)
      */
     public function putApiResourceAction(string $id)
     {
@@ -232,7 +232,7 @@ abstract class AbstractApiResourceController
      * @throws \Exception
      *
      * @Rest\Post("")
-     * @Rest\View(serializerGroups={"detail"})
+     * @Rest\View(serializerGroups={"detail"}, serializerEnableMaxDepthChecks=true)
      */
     public function postApiResourceAction(?ApiResource $apiResource)
     {
